@@ -1,4 +1,4 @@
-__version__ = ""
+__version__ = "0.0.2"
 
 __title__ = "thumbor-gcs"
 __description__ = "Thumbor Loader and Result Storage for Google Cloud Storage(GCS)"

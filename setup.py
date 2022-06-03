@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 
 NAME = "thumbor-gcs"
 PACKAGES = find_packages()
-META_PATH = os.path.join("thumbor-gcs", "__init__.py")
+META_PATH = os.path.join("thumbor_gcs", "__init__.py")
 KEYWORDS = ["thumbor", "google cloud platform", "google-cloud-storage", "imaging", "thumbnail", "imagemagick"]
 CLASSIFIERS = [
     "Development Status :: 4 - Beta",

@@ -18,7 +18,7 @@ jobs:
         python-version: '3.9'
     - name: Install dependencies
       run: |
-        sed -i "s/__version__.*\"/__version__ = \"`echo ${{ github.ref_name }} | sed -e "s/^v//"`\"/g" ./thumbor-gcs/__init__.py
+        sed -i "s/__version__.*\"/__version__ = \"`echo ${{ github.ref_name }} | sed -e "s/^v//"`\"/g" ./thumbor_gcs/__init__.py
         python -m pip install --upgrade pip
         pip install build
     - name: Build package

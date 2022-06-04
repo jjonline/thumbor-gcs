@@ -22,14 +22,14 @@ class Storage(BaseStorage):
         return self.context.config.AUTO_WEBP and self.context.request.accepts_webp
 
     def normalize_path(self, request_path):
-        """put object to result bucket.
+        """calculate Path of URL to storage object path.
 
         :type request_path: str
         :param request_path:
             full PATH of request URL,
             for example:
                 URL is `https://domain.com/security/0x0/public/sample.png`
-                Then PATH is `/security/0x0/public/sample.png`
+                Then param request_path is `/security/0x0/public/sample.png`
         """
         digest = hashlib.sha1(unquote(request_path).encode("utf-8")).hexdigest()
 

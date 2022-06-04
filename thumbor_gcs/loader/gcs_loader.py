@@ -19,7 +19,7 @@ async def load(context, path):
     result = LoaderResult()
 
     if thumbor_gcs.client.Instance is None:
-        thumbor_gcs.client.Instance = thumbor_gcs.client.Client(context)
+        thumbor_gcs.client.Instance = thumbor_gcs.client.BucketClient(context)
 
     blob = thumbor_gcs.client.Instance.loader_get_object(path)
     if blob is None:

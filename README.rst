@@ -68,9 +68,9 @@ Result storage settings
 
    RESULT_STORAGE = 'thumbor_gcs.result_storage.gcs_result_storage'
    # set your google cloud storage bucket name
-   RESULT_STORAGE_GCS_PROJECT_ID = ''
-   # set your google cloud project id
    RESULT_STORAGE_GCS_BUCKET_ID = ''
+   # set your google cloud project id
+   RESULT_STORAGE_GCS_PROJECT_ID = ''
    RESULT_STORAGE_GCS_ROOT_PATH = ''
 
 Other

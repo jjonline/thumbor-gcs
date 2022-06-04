@@ -1,9 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import hashlib
-from urllib.parse import unquote
-
 from google.cloud import storage
 from google.cloud.storage import Client, Bucket
 from thumbor.context import Context

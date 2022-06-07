@@ -36,7 +36,7 @@ class Storage(BaseStorage):
         """
         To avoid confusion when using the same GCS, you can set RESULT_STORAGE_GCS_ROOT_PATH value
         """
-        root_path = self.context.config.RESULT_STORAGE_GCS_ROOT_PATH.rstrip("/")
+        root_path = thumbor_gcs.client.Instance.result_root_path()
         prefix = "auto_webp" if self.is_auto_webp else "default"
 
         return f"{root_path}/{prefix}/{digest[:2]}/{digest[2:4]}/{digest[4:]}"

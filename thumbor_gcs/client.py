@@ -11,6 +11,8 @@ class BucketClient:
     loaderBucket: Bucket = None
     resultClient: Client = None
     resultBucket: Bucket = None
+    loaderRootPath: str = ''
+    resultRootPath: str = ''
     context: Context = None
 
     def __init__(self, context):
@@ -31,6 +33,18 @@ class BucketClient:
             self.resultClient = storage.Client(result_project_id)
             self.resultBucket = self.loaderClient.bucket(result_bucket_id)
 
+        """ deal loader and result_storage root_path once """
+        loader_root_path_config = self.context.config.get('LOADER_GCS_ROOT_PATH')
+        result_root_path_config = self.context.config.get('RESULT_STORAGE_GCS_ROOT_PATH')
+        if loader_root_path_config is not None:
+            self.loaderRootPath = loader_root_path_config.rstrip("/")
+        if result_root_path_config is not None:
+            self.resultRootPath = result_root_path_config.rstrip("/")
+
+    def result_root_path(self):
+        """ get instance result root path setting """
+        return self.resultRootPath
+
     def loader_get_object(self, path: str):
         """Get object from loader bucket.
 
@@ -44,8 +58,7 @@ class BucketClient:
                 if your config `LOADER_GCS_ROOT_PATH` is EMPTY, then REAL object path is `public/sample.png`
                 if your config `LOADER_GCS_ROOT_PATH` is SOME, then REAL object path is `SOME/public/sample.png`
         """
-        root_path = self.context.config.LOADER_GCS_ROOT_PATH.strip("/")
-        path = f"{root_path}/{path}".lstrip('/')
+        path = f"{self.loaderRootPath}/{path}".lstrip('/')
         return self.loaderBucket.get_blob(path)
 
     def result_get_object(self, path: str):

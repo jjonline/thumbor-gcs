@@ -1,9 +1,51 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
+from thumbor.config import Config
 from google.cloud import storage
 from google.cloud.storage import Client, Bucket
 from thumbor.context import Context
+
+Config.define(
+    "LOADER_GCS_PROJECT_ID",
+    "",
+    "project id for google cloud storage used for loader.",
+    "GCS Storage",
+)
+
+Config.define(
+    "LOADER_GCS_BUCKET_ID",
+    "",
+    "bucket id for google cloud storage used for loader.",
+    "GCS Storage",
+)
+
+Config.define(
+    "RESULT_STORAGE_GCS_PROJECT_ID",
+    "",
+    "project id for google cloud storage used for result storage.",
+    "GCS Storage",
+)
+
+Config.define(
+    "RESULT_STORAGE_GCS_BUCKET_ID",
+    "",
+    "bucket id for google cloud storage used for result storage.",
+    "GCS Storage",
+)
+
+Config.define(
+    "LOADER_GCS_ROOT_PATH",
+    "",
+    "set google cloud storage object prefix path used for loader.",
+    "GCS Storage",
+)
+
+Config.define(
+    "RESULT_STORAGE_GCS_ROOT_PATH",
+    "",
+    "set google cloud storage object prefix path used for result storage.",
+    "GCS Storage",
+)
 
 
 class BucketClient:
@@ -18,13 +60,13 @@ class BucketClient:
     def __init__(self, context):
         """ init GCS when thumbor load thumbor_gcs.loader.gcs_loader"""
         self.context = context
-        loader_project_id = context.config.get("LOADER_GCS_PROJECT_ID")
-        loader_bucket_id = context.config.get("LOADER_GCS_BUCKET_ID")
+        loader_project_id = context.config.LOADER_GCS_PROJECT_ID
+        loader_bucket_id = context.config.LOADER_GCS_BUCKET_ID
         self.loaderClient = storage.Client(loader_project_id)
         self.loaderBucket = self.loaderClient.bucket(loader_bucket_id)
 
-        result_project_id = self.context.config.get("RESULT_STORAGE_GCS_PROJECT_ID")
-        result_bucket_id = self.context.config.get("RESULT_STORAGE_GCS_BUCKET_ID")
+        result_project_id = self.context.config.RESULT_STORAGE_GCS_PROJECT_ID
+        result_bucket_id = self.context.config.RESULT_STORAGE_GCS_BUCKET_ID
         """ if loader bucket and result_storage bucket are same, use same instance """
         if result_project_id == loader_project_id and result_bucket_id == loader_bucket_id:
             self.resultClient = self.loaderClient
@@ -34,12 +76,8 @@ class BucketClient:
             self.resultBucket = self.loaderClient.bucket(result_bucket_id)
 
         """ deal loader and result_storage root_path once """
-        loader_root_path_config = self.context.config.get('LOADER_GCS_ROOT_PATH')
-        result_root_path_config = self.context.config.get('RESULT_STORAGE_GCS_ROOT_PATH')
-        if loader_root_path_config is not None:
-            self.loaderRootPath = loader_root_path_config.rstrip("/")
-        if result_root_path_config is not None:
-            self.resultRootPath = result_root_path_config.rstrip("/")
+        self.loaderRootPath = self.context.config.LOADER_GCS_ROOT_PATH.rstrip("/")
+        self.resultRootPath = self.context.config.RESULT_STORAGE_GCS_ROOT_PATH.rstrip("/")
 
     def result_root_path(self):
         """ get instance result root path setting """

@@ -1,36 +1,29 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
 from thumbor.loaders import LoaderResult
 from thumbor.utils import logger
 
-import thumbor_gcs.client
+from thumbor_gcs.storage_manager import get_manager
 
 
 async def load(context, path):
-    """
-    path is real storage file path
-    for example:
-        public/article/content/202205/07902518-0be0-4a60-8789-66d8b31665db.jpeg
-    """
+    """Load an image from GCS."""
     logger.debug("[Loader] loader origin path is %s" % path)
-    path = path.lstrip('/')
 
     result = LoaderResult()
+    manager = get_manager(context)
 
-    if thumbor_gcs.client.Instance is None:
-        thumbor_gcs.client.Instance = thumbor_gcs.client.BucketClient(context)
+    if manager.loader is None:
+        logger.error("[Loader] GCS loader not configured")
+        result.error = LoaderResult.ERROR_NOT_FOUND
+        result.successful = False
+        return result
 
-    blob = thumbor_gcs.client.Instance.loader_get_object(path)
+    blob = manager.loader.get_object(path.lstrip('/'))
     if blob is None:
-        """ file do not exist """
         result.error = LoaderResult.ERROR_NOT_FOUND
         result.successful = False
     else:
-        """ file exist """
         result.successful = True
         result.buffer = blob.download_as_bytes()
-
         result.metadata.update(
             size=blob.size,
             updated_at=blob.updated,

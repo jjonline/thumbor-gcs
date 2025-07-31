@@ -1,7 +1,7 @@
 from thumbor.loaders import LoaderResult
 from thumbor.utils import logger
 
-from thumbor_gcs.storage_manager import get_manager
+from thumbor_gcs.storage_manager import StorageManager
 
 
 async def load(context, path):
@@ -9,7 +9,7 @@ async def load(context, path):
     logger.debug("[Loader] loader origin path is %s" % path)
 
     result = LoaderResult()
-    manager = get_manager(context)
+    manager = StorageManager(context)
 
     if manager.loader is None:
         logger.error("[Loader] GCS loader not configured")

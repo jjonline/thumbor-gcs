@@ -5,13 +5,13 @@ from thumbor.engines import BaseEngine
 from thumbor.result_storages import BaseStorage, ResultStorageResult
 from thumbor.utils import logger, deprecated
 
-from thumbor_gcs.storage_manager import get_manager
+from thumbor_gcs.storage_manager import StorageManager
 
 
 class Storage(BaseStorage):
     def __init__(self, context):
         BaseStorage.__init__(self, context)
-        self.manager = get_manager(context)
+        self.manager = StorageManager(context)
 
     @property
     def is_auto_webp(self):

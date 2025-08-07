@@ -1,7 +1,7 @@
 from google.cloud import storage
 
 
-class GCSClient:
+class StorageClient:
     def __init__(self, gcs_client: storage.Client, bucket_id: str, root_path: str = ''):
         """Initialize GCS client wrapper.
 
